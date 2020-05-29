@@ -1,31 +1,32 @@
-const bcrypt = require("bcryptjs")
-
-const User = require('../models/User')
+const jwt = require('jsonwebtoken')
+const authConfig = require('../config/auth.json')
 
 module.exports = {
-  async store (req, res) {
-    const { name, email, password } = req.body
+  async validate(req, res, next) {
+    const authHeader = req.headers.authorization;
 
-    const mailExists = await User.findOne({ email })
+    if (!authHeader) return res.status(401).json({ error: "No Token provided" })
 
-    if(mailExists) {
-      return res.status(400).json({ error: "Email Já existe. Tente novamente!" })
-    }
+    // formato do token: Bearer dasknsjgiofevn291i2efv0492nvo2w 
 
-    try {
-      const hash = await bcrypt.hash(password, 10)
+    const parts = authHeader.split(' ');
 
-      const user = await User.create({
-        name,
-        email, 
-        password: hash
-      })
+    if (!parts.length === 2) return res.status(401).json({ error: "Token error" })
 
-      user.password = undefined
+    const [scheme, token] = parts;
 
-      return res.status(200).json({ user })
-    } catch (e) {
-      return res.status(400).json({ error: "Registration failed" })
-    }
+    if (!/^Bearer$/i.test(scheme)) return res.status(401).json({ error: "Token malformatted" })
+
+    jwt.verify(token, authConfig.hash, (err, decoded) => {
+      if (err) return res.status(401).json({ error: "Token invalid" })
+
+      req.userId = decoded.id
+
+      return next()
+    })
   },
+
+  async auth(req, res) {
+    res.send(req.userId)
+  }
 }
