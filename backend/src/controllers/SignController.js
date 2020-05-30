@@ -24,9 +24,7 @@ module.exports = {
 
       user.password = undefined
 
-      const token = GenerateToken(user.id)
-
-      return res.status(200).json({ user, token })
+      return res.status(200).json({ user })
     } catch (e) {
       return res.status(406).json({ error: "Falha em registrar novo usuário" })
     }
