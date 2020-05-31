@@ -9,6 +9,7 @@ const app = express()
 mongoose.connect(`mongodb+srv://${process.env.MONGODB_LOGIN}:${process.env.MONGODB_PASS}@login-vlxvu.mongodb.net/auth?retryWrites=true&w=majority`, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useFindAndModify: false
 })
 
 const routes = require('./routes')

@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 
-import './style.css'
-
 import api from '../../services/api'
 import { login, getToken } from '../../services/auth'
 
@@ -48,6 +46,10 @@ function SignIn() {
 
         <Link to="/signup">
           Quero me cadastrar!
+        </Link>
+
+        <Link to="/forgot_password">
+          Esqueci a senha.
         </Link>
       </form>
     </div>

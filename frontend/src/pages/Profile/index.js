@@ -10,25 +10,28 @@ export default function Profile() {
 
   const [user, setUser] = useState({})
 
-  useEffect(() => {
-    api.get('/users').then(res => {
-      console.log("a")
-      setUser(res.data)
-    })
-  }, [token])
-
-  document.title = `${user.name} Profile`
-
   function handleLogout() {
     logout()
 
     history.push('/')
   }
 
+  useEffect(() => {
+    api.get('/users').then(res => {
+      setUser(res.data)
+    }).catch(err => {
+      logout()
+
+      history.push('/')
+    })
+  }, [history, token])
+
+  document.title = `Profile`
+
   return (
     <div className="profile-container">
       <h1>Alo {user.name}</h1>
-      <span className="logout" onClick={handleLogout}>Sair!</span>
+      <span className="logout btn" onClick={handleLogout}>Sair!</span>
     </div>
   )
 }

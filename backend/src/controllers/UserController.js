@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken')
 
-
 const User = require('../models/User')
 const authConfig = require('../config/auth.json')
 
@@ -29,7 +28,7 @@ module.exports = {
     })
   },
 
-  async index(req, res) {
+  async show(req, res) {
     const _id  = req.userId
 
     const user = await User.findById({ _id })
