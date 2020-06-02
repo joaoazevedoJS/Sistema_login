@@ -3,16 +3,24 @@ import { Link, useHistory } from 'react-router-dom'
 
 import api from '../../services/api'
 import { login, getToken } from '../../services/auth'
+import session from '../../auth/session'
 
 function SignIn() {
   const history = useHistory()
-  const token = getToken()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  if (token) {
-    history.push('/profile')
+  async function auth() {
+    await session()
+
+    if(getToken()) {
+      history.push('/profile')
+    }
+  }
+
+  if (getToken()) {
+    auth()
   }
 
   async function handleForm(e) {

@@ -1,10 +1,9 @@
 const jwt = require('jsonwebtoken')
 
-const User = require('../models/User')
 const { hash } = require('../config/auth.json')
 
 module.exports = {
-  async validate(req, res, next) {
+  async create(req, res, next) {
     const authHeader = req.headers.authorization;
 
     if (!authHeader) return res.status(401).json({ error: "No Token provided" })
@@ -22,17 +21,7 @@ module.exports = {
     jwt.verify(token, hash, (err, decoded) => {
       if (err) return res.status(401).json({ error: "Token invalid" })
 
-      req.userId = decoded.id
-
-      return next()
+      return res.send('')
     })
-  },
-
-  async show(req, res) {
-    const _id  = req.userId
-
-    const user = await User.findById({ _id })
-
-    return res.status(200).json(user)
-  },
+  }
 }

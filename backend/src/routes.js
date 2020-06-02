@@ -4,6 +4,9 @@ const routes = Router()
 
 const SignController = require("./controllers/SignController")
 const UserController = require("./controllers/UserController")
+const SessionController = require("./controllers/SessionController")
+
+routes.post('/session', SessionController.create)
 
 routes.use('/users', UserController.validate)
 routes.get('/users' , UserController.show)
